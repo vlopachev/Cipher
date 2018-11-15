@@ -3,7 +3,7 @@ package com.epam.cipher;
 public class FourSquareCipher {
     public static final int SQUARES = 4;
     private int sizeMatrix;
-    private String[] fourMixedAlphabetForSquares;
+    private String[] key;
     private char[][] topLeftSquareMatrix;
     private char[][] bottomLeftSquareMatrix;
     private char[][] topRightSquareMatrix;
@@ -14,18 +14,18 @@ public class FourSquareCipher {
         return sizeMatrix;
     }
 
-    public String[] getFourMixedAlphabetForSquares() {
-        return fourMixedAlphabetForSquares;
+    public String[] getKey() {
+        return key;
     }
 
-    public void setFourMixedAlphabetForSquares(String[] fourMixedAlphabetForSquares) {
-        if (fourMixedAlphabetForSquares != null && fourMixedAlphabetForSquares.length == SQUARES) {
-            this.fourMixedAlphabetForSquares = fourMixedAlphabetForSquares;
+    public void setKey(String[] key) {
+        if (key != null && key.length == SQUARES) {
+            this.key = key;
             setSizeMatrix();
-            topLeftSquareMatrix = fillMatrixFromString(fourMixedAlphabetForSquares[0]);
-            bottomLeftSquareMatrix = fillMatrixFromString(fourMixedAlphabetForSquares[1]);
-            topRightSquareMatrix = fillMatrixFromString(fourMixedAlphabetForSquares[2]);
-            bottomRightSquareMatrix = fillMatrixFromString(fourMixedAlphabetForSquares[3]);
+            topLeftSquareMatrix = fillMatrixFromString(key[0]);
+            bottomLeftSquareMatrix = fillMatrixFromString(key[1]);
+            topRightSquareMatrix = fillMatrixFromString(key[2]);
+            bottomRightSquareMatrix = fillMatrixFromString(key[3]);
         }
 
     }
@@ -60,7 +60,7 @@ public class FourSquareCipher {
 
 
     private void setSizeMatrix() {
-        this.sizeMatrix = (int) Math.ceil(Math.sqrt(fourMixedAlphabetForSquares[0].length()));
+        this.sizeMatrix = (int) Math.ceil(Math.sqrt(key[0].length()));
     }
 
     private char[][] fillMatrixFromString(String alphabet) {

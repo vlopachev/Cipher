@@ -27,7 +27,7 @@ public class Start {
         fourMixedAlphabetForSquares[3] = properties.getProperty("bottom.right.square");
 
         FourSquareCipher cipher = new FourSquareCipher();
-        cipher.setFourMixedAlphabetForSquares(fourMixedAlphabetForSquares);
+        cipher.setKey(fourMixedAlphabetForSquares);
         cipher.printMatrix(SquareLayout.BOTTOM_LEFT);
 
 
