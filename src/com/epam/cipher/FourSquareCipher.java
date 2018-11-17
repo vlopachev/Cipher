@@ -63,9 +63,6 @@ public class FourSquareCipher {
 
 
 
-
-
-
         return message;
     }
 
