@@ -9,7 +9,6 @@ public class FourSquareCipher {
     private char[][] topRightSquareMatrix;
     private char[][] bottomRightSquareMatrix;
 
-
     public int getSizeMatrix() {
         return sizeMatrix;
     }
@@ -27,7 +26,65 @@ public class FourSquareCipher {
             topRightSquareMatrix = fillMatrixFromString(key[2]);
             bottomRightSquareMatrix = fillMatrixFromString(key[3]);
         }
+    }
 
+    public String encript(String message){
+        String[] pairsLetters = message.split("(?<=\\G.{2})");
+        String pair;
+        if ((pair = pairsLetters[pairsLetters.length -1]).length() == 1) {
+            pairsLetters[pairsLetters.length -1] = pair + pair;
+        }
+        String encriptMessage = "";
+        for (String pairLetters: pairsLetters){
+            char firstLetter = pairLetters.charAt(0);
+            char secondLetter = pairLetters.charAt(1);
+            int[] positionFistLetterInMatrix =
+                    findPositionLetterInMatrix(Character.toLowerCase(firstLetter),topLeftSquareMatrix);
+            int[] positionSecondLetterInMatrix =
+                    findPositionLetterInMatrix(Character.toLowerCase(secondLetter),bottomRightSquareMatrix);
+            char firstEncryptLetter =
+                    bottomLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]];
+            char secondEncryptLetter =
+                    topRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]];
+            if (Character.isUpperCase(firstLetter)){
+                firstEncryptLetter = Character.toUpperCase(firstEncryptLetter);
+            }
+            if (Character.isUpperCase(secondLetter)){
+                secondEncryptLetter = Character.toUpperCase(secondEncryptLetter);
+            }
+            encriptMessage += String.valueOf(firstEncryptLetter) + String.valueOf(secondEncryptLetter);
+        }
+        return encriptMessage;
+    }
+
+    public String decript(String encriptMessage){
+        String message = "";
+
+
+
+
+
+
+
+        return message;
+    }
+
+
+
+    private int[] findPositionLetterInMatrix(char letter, char[][] matrix) {
+        int[] positionLetter = new int[2];
+        if (matrix != null){
+            for (int i = 0; i < sizeMatrix; i++) {
+                for (int j = 0; j < sizeMatrix; j++) {
+                    if (letter == matrix[i][j]){
+                        positionLetter[0] = i;
+                        positionLetter[1] = j;
+                        break;
+                    }
+                }
+            }
+        }
+        return positionLetter;
     }
 
     public void printMatrix(SquareLayout squareLayout) {
@@ -58,7 +115,6 @@ public class FourSquareCipher {
         System.out.println();
     }
 
-
     private void setSizeMatrix() {
         this.sizeMatrix = (int) Math.ceil(Math.sqrt(key[0].length()));
     }
@@ -77,7 +133,4 @@ public class FourSquareCipher {
         }
         return matrix;
     }
-
-
-
 }

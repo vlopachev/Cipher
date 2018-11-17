@@ -30,9 +30,8 @@ public class Start {
         cipher.setKey(fourMixedAlphabetForSquares);
         cipher.printMatrix(SquareLayout.BOTTOM_LEFT);
 
+        System.out.println(cipher.encript("Пошли вы все"));
 
+        System.out.println((int)' ');
     }
-
-
-
 }
