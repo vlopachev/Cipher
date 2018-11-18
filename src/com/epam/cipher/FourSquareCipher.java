@@ -39,36 +39,30 @@ public class FourSquareCipher {
         if ((pair = pairsLetters[pairsLetters.length - 1]).length() == 1) {
             pairsLetters[pairsLetters.length - 1] = pair + pair;
         }
-        String encriptMessage = "";
+        StringBuilder encriptMessage = new StringBuilder();
         for (String pairLetters : pairsLetters) {
             int[] positionFistLetterInMatrix =
                     findPositionLetterInMatrix(pairLetters.charAt(0), topLeftSquareMatrix);
             int[] positionSecondLetterInMatrix =
                     findPositionLetterInMatrix(pairLetters.charAt(1), bottomRightSquareMatrix);
-            char firstEncryptLetter =
-                    bottomLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]];
-            char secondEncryptLetter =
-                    topRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]];
-            encriptMessage += String.valueOf(firstEncryptLetter) + String.valueOf(secondEncryptLetter);
+            encriptMessage.append(bottomLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]]);
+            encriptMessage.append(topRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]]);
         }
-        return encriptMessage;
+        return encriptMessage.toString();
     }
 
     public String decript(String encriptMessage) {
         String[] pairsLetters = encriptMessage.split("(?<=\\G.{2})");
-        String decriptMessage = "";
+        StringBuilder decriptMessage = new StringBuilder();
         for (String pairLetters : pairsLetters) {
             int[] positionFistLetterInMatrix =
                     findPositionLetterInMatrix(pairLetters.charAt(0), bottomLeftSquareMatrix);
             int[] positionSecondLetterInMatrix =
                     findPositionLetterInMatrix(pairLetters.charAt(1), topRightSquareMatrix);
-            char firstDecryptLetter =
-                    topLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]];
-            char secondDecryptLetter =
-                    bottomRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]];
-            decriptMessage += String.valueOf(firstDecryptLetter) + String.valueOf(secondDecryptLetter);
+            decriptMessage.append(topLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]]);
+            decriptMessage.append(bottomRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]]);
         }
-        return decriptMessage;
+        return decriptMessage.toString();
     }
 
     public List<Character> keygen() {
