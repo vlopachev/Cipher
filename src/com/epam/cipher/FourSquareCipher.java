@@ -78,14 +78,7 @@ public class FourSquareCipher {
         alphabet.add('ё');
         alphabet.add('Ё');
         Collections.shuffle(alphabet);
-        System.out.println(alphabet.size()+ "dfdfd");
         return alphabet;
-    }
-
-    private void addCharsToAlphabet(List<Character> alphabet, int i2, int i3) {
-        for (int i = i2; i <= i3; i++) {
-            alphabet.add((char) i);
-        }
     }
 
     public int[] getOptimalMatrixSize(int numberOfLetters) {
@@ -94,23 +87,6 @@ public class FourSquareCipher {
             averageNumberOfRowsAndColumns--;
         }
         return new int[]{averageNumberOfRowsAndColumns, numberOfLetters / averageNumberOfRowsAndColumns};
-    }
-
-
-    private int[] findPositionLetterInMatrix(char letter, char[][] matrix) {
-        int[] positionLetter = new int[2];
-        if (matrix != null) {
-            for (int i = 0; i < sizeMatrix[0]; i++) {
-                for (int j = 0; j < sizeMatrix[1]; j++) {
-                    if (letter == matrix[i][j]) {
-                        positionLetter[0] = i;
-                        positionLetter[1] = j;
-                        break;
-                    }
-                }
-            }
-        }
-        return positionLetter;
     }
 
     public void printMatrix(SquareLayout squareLayout) {
@@ -139,6 +115,28 @@ public class FourSquareCipher {
             System.out.println();
         }
         System.out.println();
+    }
+
+    private void addCharsToAlphabet(List<Character> alphabet, int i2, int i3) {
+        for (int i = i2; i <= i3; i++) {
+            alphabet.add((char) i);
+        }
+    }
+
+    private int[] findPositionLetterInMatrix(char letter, char[][] matrix) {
+        int[] positionLetter = new int[2];
+        if (matrix != null) {
+            for (int i = 0; i < sizeMatrix[0]; i++) {
+                for (int j = 0; j < sizeMatrix[1]; j++) {
+                    if (letter == matrix[i][j]) {
+                        positionLetter[0] = i;
+                        positionLetter[1] = j;
+                        break;
+                    }
+                }
+            }
+        }
+        return positionLetter;
     }
 
     private void setSizeMatrix() {
