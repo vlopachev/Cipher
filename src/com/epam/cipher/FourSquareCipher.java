@@ -33,18 +33,18 @@ public class FourSquareCipher {
         }
     }
 
-    public String encript(String message){
+    public String encript(String message) {
         String[] pairsLetters = message.split("(?<=\\G.{2})");
         String pair;
-        if ((pair = pairsLetters[pairsLetters.length -1]).length() == 1) {
-            pairsLetters[pairsLetters.length -1] = pair + pair;
+        if ((pair = pairsLetters[pairsLetters.length - 1]).length() == 1) {
+            pairsLetters[pairsLetters.length - 1] = pair + pair;
         }
         String encriptMessage = "";
-        for (String pairLetters: pairsLetters){
+        for (String pairLetters : pairsLetters) {
             int[] positionFistLetterInMatrix =
-                    findPositionLetterInMatrix(pairLetters.charAt(0),topLeftSquareMatrix);
+                    findPositionLetterInMatrix(pairLetters.charAt(0), topLeftSquareMatrix);
             int[] positionSecondLetterInMatrix =
-                    findPositionLetterInMatrix(pairLetters.charAt(1),bottomRightSquareMatrix);
+                    findPositionLetterInMatrix(pairLetters.charAt(1), bottomRightSquareMatrix);
             char firstEncryptLetter =
                     bottomLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]];
             char secondEncryptLetter =
@@ -54,29 +54,31 @@ public class FourSquareCipher {
         return encriptMessage;
     }
 
-    public String decript(String encriptMessage){
-        String message = "";
-        return message;
+    public String decript(String encriptMessage) {
+        String[] pairsLetters = encriptMessage.split("(?<=\\G.{2})");
+        String decriptMessage = "";
+        for (String pairLetters : pairsLetters) {
+            int[] positionFistLetterInMatrix =
+                    findPositionLetterInMatrix(pairLetters.charAt(0), bottomLeftSquareMatrix);
+            int[] positionSecondLetterInMatrix =
+                    findPositionLetterInMatrix(pairLetters.charAt(1), topRightSquareMatrix);
+            char firstDecryptLetter =
+                    topLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]];
+            char secondDecryptLetter =
+                    bottomRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]];
+            decriptMessage += String.valueOf(firstDecryptLetter) + String.valueOf(secondDecryptLetter);
+        }
+        return decriptMessage;
     }
 
-    public List<Character> keygen (TypeAlphabet typeAlphabet){
+    public List<Character> keygen() {
         List<Character> alphabet = new ArrayList<>();
-        switch (typeAlphabet){
-            case LATIN:
-                addCharsToAlphabet(alphabet, 32, 126);
-                break;
-            case CYRILLIC:
-                addCharsToAlphabet(alphabet, 1040, 1103);
-                alphabet.add('ё');
-                alphabet.add('Ё');
-                addCharsToAlphabet(alphabet, 32, 64);
-                addCharsToAlphabet(alphabet, 91, 96);
-                addCharsToAlphabet(alphabet, 123, 125);
-                break;
-            default:
-                throw new RuntimeException("NotSupportedTypeAlphabet");
-        }
+        addCharsToAlphabet(alphabet, 32, 126);
+        addCharsToAlphabet(alphabet, 1040, 1103);
+        alphabet.add('ё');
+        alphabet.add('Ё');
         Collections.shuffle(alphabet);
+        System.out.println(alphabet.size()+ "dfdfd");
         return alphabet;
     }
 
@@ -86,21 +88,21 @@ public class FourSquareCipher {
         }
     }
 
-    public int[] getOptimalMatrixSize(int numberOfLetters){
+    public int[] getOptimalMatrixSize(int numberOfLetters) {
         int averageNumberOfRowsAndColumns = (int) Math.floor(Math.sqrt(numberOfLetters));
-        while (numberOfLetters % averageNumberOfRowsAndColumns != 0){
-            averageNumberOfRowsAndColumns --;
+        while (numberOfLetters % averageNumberOfRowsAndColumns != 0) {
+            averageNumberOfRowsAndColumns--;
         }
-        return new int[] {averageNumberOfRowsAndColumns, numberOfLetters / averageNumberOfRowsAndColumns};
+        return new int[]{averageNumberOfRowsAndColumns, numberOfLetters / averageNumberOfRowsAndColumns};
     }
 
 
     private int[] findPositionLetterInMatrix(char letter, char[][] matrix) {
         int[] positionLetter = new int[2];
-        if (matrix != null){
+        if (matrix != null) {
             for (int i = 0; i < sizeMatrix[0]; i++) {
                 for (int j = 0; j < sizeMatrix[1]; j++) {
-                    if (letter == matrix[i][j]){
+                    if (letter == matrix[i][j]) {
                         positionLetter[0] = i;
                         positionLetter[1] = j;
                         break;
@@ -113,7 +115,7 @@ public class FourSquareCipher {
 
     public void printMatrix(SquareLayout squareLayout) {
         char[][] matrix = null;
-        switch (squareLayout){
+        switch (squareLayout) {
             case TOP_LEFT:
                 matrix = topLeftSquareMatrix;
                 break;
@@ -131,7 +133,7 @@ public class FourSquareCipher {
 
         }
         for (int i = 0; i < sizeMatrix[0]; i++) {
-            for (int j = 0; j < sizeMatrix[0]; j++) {
+            for (int j = 0; j < sizeMatrix[1]; j++) {
                 System.out.print(matrix[i][j]);
             }
             System.out.println();
@@ -148,7 +150,7 @@ public class FourSquareCipher {
         char[] array = alphabet.toCharArray();
         int counter = 0;
         for (int i = 0; i < sizeMatrix[0]; i++) {
-            for (int j = 0; j < sizeMatrix[0]; j++) {
+            for (int j = 0; j < sizeMatrix[1]; j++) {
                 if (counter < array.length) {
                     matrix[i][j] = array[counter];
                     counter++;
