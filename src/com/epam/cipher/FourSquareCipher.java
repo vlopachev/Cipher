@@ -1,15 +1,20 @@
 package com.epam.cipher;
 
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class FourSquareCipher {
     public static final int SQUARES = 4;
-    private int sizeMatrix;
+    private int[] sizeMatrix;
     private String[] key;
     private char[][] topLeftSquareMatrix;
     private char[][] bottomLeftSquareMatrix;
     private char[][] topRightSquareMatrix;
     private char[][] bottomRightSquareMatrix;
 
-    public int getSizeMatrix() {
+    public int[] getSizeMatrix() {
         return sizeMatrix;
     }
 
@@ -36,22 +41,14 @@ public class FourSquareCipher {
         }
         String encriptMessage = "";
         for (String pairLetters: pairsLetters){
-            char firstLetter = pairLetters.charAt(0);
-            char secondLetter = pairLetters.charAt(1);
             int[] positionFistLetterInMatrix =
-                    findPositionLetterInMatrix(Character.toLowerCase(firstLetter),topLeftSquareMatrix);
+                    findPositionLetterInMatrix(pairLetters.charAt(0),topLeftSquareMatrix);
             int[] positionSecondLetterInMatrix =
-                    findPositionLetterInMatrix(Character.toLowerCase(secondLetter),bottomRightSquareMatrix);
+                    findPositionLetterInMatrix(pairLetters.charAt(1),bottomRightSquareMatrix);
             char firstEncryptLetter =
                     bottomLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]];
             char secondEncryptLetter =
                     topRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]];
-            if (Character.isUpperCase(firstLetter)){
-                firstEncryptLetter = Character.toUpperCase(firstEncryptLetter);
-            }
-            if (Character.isUpperCase(secondLetter)){
-                secondEncryptLetter = Character.toUpperCase(secondEncryptLetter);
-            }
             encriptMessage += String.valueOf(firstEncryptLetter) + String.valueOf(secondEncryptLetter);
         }
         return encriptMessage;
@@ -59,20 +56,50 @@ public class FourSquareCipher {
 
     public String decript(String encriptMessage){
         String message = "";
-
-
-
-
         return message;
     }
 
+    public List<Character> keygen (TypeAlphabet typeAlphabet){
+        List<Character> alphabet = new ArrayList<>();
+        switch (typeAlphabet){
+            case LATIN:
+                addCharsToAlphabet(alphabet, 32, 126);
+                break;
+            case CYRILLIC:
+                addCharsToAlphabet(alphabet, 1040, 1103);
+                alphabet.add('ё');
+                alphabet.add('Ё');
+                addCharsToAlphabet(alphabet, 32, 64);
+                addCharsToAlphabet(alphabet, 91, 96);
+                addCharsToAlphabet(alphabet, 123, 125);
+                break;
+            default:
+                throw new RuntimeException("NotSupportedTypeAlphabet");
+        }
+        Collections.shuffle(alphabet);
+        return alphabet;
+    }
+
+    private void addCharsToAlphabet(List<Character> alphabet, int i2, int i3) {
+        for (int i = i2; i <= i3; i++) {
+            alphabet.add((char) i);
+        }
+    }
+
+    public int[] getOptimalMatrixSize(int numberOfLetters){
+        int averageNumberOfRowsAndColumns = (int) Math.floor(Math.sqrt(numberOfLetters));
+        while (numberOfLetters % averageNumberOfRowsAndColumns != 0){
+            averageNumberOfRowsAndColumns --;
+        }
+        return new int[] {averageNumberOfRowsAndColumns, numberOfLetters / averageNumberOfRowsAndColumns};
+    }
 
 
     private int[] findPositionLetterInMatrix(char letter, char[][] matrix) {
         int[] positionLetter = new int[2];
         if (matrix != null){
-            for (int i = 0; i < sizeMatrix; i++) {
-                for (int j = 0; j < sizeMatrix; j++) {
+            for (int i = 0; i < sizeMatrix[0]; i++) {
+                for (int j = 0; j < sizeMatrix[1]; j++) {
                     if (letter == matrix[i][j]){
                         positionLetter[0] = i;
                         positionLetter[1] = j;
@@ -103,8 +130,8 @@ public class FourSquareCipher {
                 throw new RuntimeException("NotSupportedSquareLayout");
 
         }
-        for (int i = 0; i < sizeMatrix; i++) {
-            for (int j = 0; j < sizeMatrix; j++) {
+        for (int i = 0; i < sizeMatrix[0]; i++) {
+            for (int j = 0; j < sizeMatrix[0]; j++) {
                 System.out.print(matrix[i][j]);
             }
             System.out.println();
@@ -113,15 +140,15 @@ public class FourSquareCipher {
     }
 
     private void setSizeMatrix() {
-        this.sizeMatrix = (int) Math.ceil(Math.sqrt(key[0].length()));
+        this.sizeMatrix = getOptimalMatrixSize(key[0].length());
     }
 
     private char[][] fillMatrixFromString(String alphabet) {
-        char[][] matrix = new char[sizeMatrix][sizeMatrix];
+        char[][] matrix = new char[sizeMatrix[0]][sizeMatrix[1]];
         char[] array = alphabet.toCharArray();
         int counter = 0;
-        for (int i = 0; i < sizeMatrix; i++) {
-            for (int j = 0; j < sizeMatrix; j++) {
+        for (int i = 0; i < sizeMatrix[0]; i++) {
+            for (int j = 0; j < sizeMatrix[0]; j++) {
                 if (counter < array.length) {
                     matrix[i][j] = array[counter];
                     counter++;

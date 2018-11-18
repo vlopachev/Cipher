@@ -3,6 +3,7 @@ package com.epam.cipher;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Properties;
 
 
@@ -33,5 +34,40 @@ public class Start {
         System.out.println(cipher.encript("Всем привет"));
 
         System.out.println((int)' ');
+
+
+        for (char c = '0'; c <= '9'; c++){
+            System.out.println((int)c);
+        }
+
+        System.out.println((int)' ');
+
+        System.out.println(cipher.getOptimalMatrixSize(108)[0]);
+        System.out.println(cipher.getOptimalMatrixSize(108)[1]);
+
+        System.out.println(cipher.getSizeMatrix()[0]);
+        System.out.println(cipher.getSizeMatrix()[1]);
+
+
+
+
+
+        //System.out.println(cipher.keygen(TypeAlphabet.CYRILLIC));
+
+        for (char ch:cipher.keygen(TypeAlphabet.CYRILLIC)) {
+            System.out.print(ch);
+        }
+
+        System.out.println();
+
+        for (char ch:cipher.keygen(TypeAlphabet.LATIN)) {
+            System.out.print(ch);
+        }
+
+        System.out.println();
+
+        System.out.println(cipher.keygen(TypeAlphabet.CYRILLIC).size());
+        System.out.println(cipher.keygen(TypeAlphabet.LATIN).size());
+
     }
 }
