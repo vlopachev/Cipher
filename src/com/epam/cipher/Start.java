@@ -12,9 +12,9 @@ public class Start {
         FourSquareCipher cipher = new FourSquareCipher();
         cipher.setPropertyManager(propertyManager);
         cipher.setKey(fourMixedAlphabetForSquares);
-        String encryptText = cipher.encrypt(propertyManager.getProperty("text"));
-        System.out.println(encryptText);
-        String decriptText = cipher.decrypt(encryptText);
-        System.out.println(decriptText);
+        String encrypt = cipher.encrypt(propertyManager.getProperty("text"));
+        System.out.println(encrypt);
+        String decrypt = cipher.decrypt(encrypt);
+        System.out.println(decrypt);
     }
 }
