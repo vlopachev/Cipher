@@ -7,6 +7,7 @@ import java.util.List;
 
 public class FourSquareCipher {
     public static final int SQUARES = 4;
+    private PropertyManager propertyManager;
     private int[] sizeMatrix;
     private String[] key;
     private char[][] topLeftSquareMatrix;
@@ -33,36 +34,14 @@ public class FourSquareCipher {
         }
     }
 
-    public String encript(String message) {
-        String[] pairsLetters = message.split("(?<=\\G.{2})");
-        String pair;
-        if ((pair = pairsLetters[pairsLetters.length - 1]).length() == 1) {
-            pairsLetters[pairsLetters.length - 1] = pair + pair;
-        }
-        StringBuilder encriptMessage = new StringBuilder();
-        for (String pairLetters : pairsLetters) {
-            int[] positionFistLetterInMatrix =
-                    findPositionLetterInMatrix(pairLetters.charAt(0), topLeftSquareMatrix);
-            int[] positionSecondLetterInMatrix =
-                    findPositionLetterInMatrix(pairLetters.charAt(1), bottomRightSquareMatrix);
-            encriptMessage.append(bottomLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]]);
-            encriptMessage.append(topRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]]);
-        }
-        return encriptMessage.toString();
+    public String encrypt(String message) {
+        return crypt(message, topLeftSquareMatrix, bottomRightSquareMatrix,
+                bottomLeftSquareMatrix, topRightSquareMatrix);
     }
 
-    public String decript(String encriptMessage) {
-        String[] pairsLetters = encriptMessage.split("(?<=\\G.{2})");
-        StringBuilder decriptMessage = new StringBuilder();
-        for (String pairLetters : pairsLetters) {
-            int[] positionFistLetterInMatrix =
-                    findPositionLetterInMatrix(pairLetters.charAt(0), bottomLeftSquareMatrix);
-            int[] positionSecondLetterInMatrix =
-                    findPositionLetterInMatrix(pairLetters.charAt(1), topRightSquareMatrix);
-            decriptMessage.append(topLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]]);
-            decriptMessage.append(bottomRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]]);
-        }
-        return decriptMessage.toString();
+    public String decrypt(String message) {
+        return crypt(message, bottomLeftSquareMatrix, topRightSquareMatrix,
+                topLeftSquareMatrix, bottomRightSquareMatrix);
     }
 
     public List<Character> keygen() {
@@ -80,7 +59,7 @@ public class FourSquareCipher {
         while (numberOfLetters % averageNumberOfRowsAndColumns != 0) {
             averageNumberOfRowsAndColumns--;
         }
-        return new int[]{averageNumberOfRowsAndColumns, numberOfLetters / averageNumberOfRowsAndColumns};
+        return new int[] {averageNumberOfRowsAndColumns, numberOfLetters / averageNumberOfRowsAndColumns};
     }
 
     public void printMatrix(SquareLayout squareLayout) {
@@ -100,7 +79,6 @@ public class FourSquareCipher {
                 break;
             default:
                 throw new RuntimeException("NotSupportedSquareLayout");
-
         }
         for (int i = 0; i < sizeMatrix[0]; i++) {
             for (int j = 0; j < sizeMatrix[1]; j++) {
@@ -109,6 +87,35 @@ public class FourSquareCipher {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public void setPropertyManager(PropertyManager propertyManager) {
+        this.propertyManager = propertyManager;
+    }
+
+    private String crypt(String message, char[][] bottomLeftSquareMatrix, char[][] topRightSquareMatrix,
+                         char[][] topLeftSquareMatrix, char[][] bottomRightSquareMatrix) {
+        if (propertyManager == null){
+            return "";
+        }
+        String[] pairsLetters = message.split(propertyManager.getProperty("split.by.two.chars"));
+        StringBuilder sbCryptMessage = new StringBuilder();
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        if (stackTrace[2].getMethodName() == "encrypt"){
+            String pair;
+            if ((pair = pairsLetters[pairsLetters.length - 1]).length() == 1) {
+                pairsLetters[pairsLetters.length - 1] = pair + pair;
+            }
+        }
+        for (String pairLetters : pairsLetters) {
+            int[] positionFistLetterInMatrix =
+                    findPositionLetterInMatrix(pairLetters.charAt(0), bottomLeftSquareMatrix);
+            int[] positionSecondLetterInMatrix =
+                    findPositionLetterInMatrix(pairLetters.charAt(1), topRightSquareMatrix);
+            sbCryptMessage.append(topLeftSquareMatrix[positionSecondLetterInMatrix[0]][positionFistLetterInMatrix[1]]);
+            sbCryptMessage.append(bottomRightSquareMatrix[positionFistLetterInMatrix[0]][positionSecondLetterInMatrix[1]]);
+        }
+        return sbCryptMessage.toString();
     }
 
     private void addCharsToAlphabet(List<Character> alphabet, int i2, int i3) {
