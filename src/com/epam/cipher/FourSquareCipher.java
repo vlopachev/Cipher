@@ -100,8 +100,7 @@ public class FourSquareCipher {
         }
         String[] pairsLetters = message.split(propertyManager.getProperty("split.by.two.chars"));
         StringBuilder sbCryptMessage = new StringBuilder();
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        if (stackTrace[2].getMethodName() == "encrypt"){
+        if (Thread.currentThread().getStackTrace()[2].getMethodName() == "encrypt"){
             String pair;
             if ((pair = pairsLetters[pairsLetters.length - 1]).length() == 1) {
                 pairsLetters[pairsLetters.length - 1] = pair + pair;
