@@ -46,11 +46,17 @@ public class FourSquareCipher {
 
     public List<Character> keygen() {
         List<Character> alphabet = new ArrayList<>();
-        addCharsToAlphabet(alphabet, 32, 126);
-        addCharsToAlphabet(alphabet, 1040, 1103);
-        alphabet.add('ё');
-        alphabet.add('Ё');
-        Collections.shuffle(alphabet);
+        if (propertyManager != null){
+            int startNumberLatinAlphabet = Integer.parseInt(propertyManager.getProperty("latin.alphabet.number.start"));
+            int endNumberLatinAlphabet = Integer.parseInt(propertyManager.getProperty("latin.alphabet.number.end"));
+            int startNumberCyrillicAlphabet = Integer.parseInt(propertyManager.getProperty("cyrillic.alphabet.number.start"));
+            int endNumberCyrillicAlphabet = Integer.parseInt(propertyManager.getProperty("cyrillic.alphabet.number.end"));
+            addCharsToAlphabet(alphabet, startNumberLatinAlphabet, endNumberLatinAlphabet);
+            addCharsToAlphabet(alphabet, startNumberCyrillicAlphabet, endNumberCyrillicAlphabet);
+            alphabet.add('ё');
+            alphabet.add('Ё');
+            Collections.shuffle(alphabet);
+        }
         return alphabet;
     }
 
@@ -96,7 +102,7 @@ public class FourSquareCipher {
     private String crypt(String message, char[][] bottomLeftSquareMatrix, char[][] topRightSquareMatrix,
                          char[][] topLeftSquareMatrix, char[][] bottomRightSquareMatrix) {
         if (propertyManager == null){
-            return "";
+            return "NotSetPropertyManager";
         }
         String[] pairsLetters = message.split(propertyManager.getProperty("split.by.two.chars"));
         StringBuilder sbCryptMessage = new StringBuilder();
