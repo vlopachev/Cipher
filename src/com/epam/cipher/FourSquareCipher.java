@@ -107,8 +107,8 @@ public class FourSquareCipher {
         String[] pairsLetters = message.split(propertyManager.getProperty("split.by.two.chars"));
         StringBuilder sbCryptMessage = new StringBuilder();
         if (Thread.currentThread().getStackTrace()[2].getMethodName() == "encrypt"){
-            String pair;
-            if ((pair = pairsLetters[pairsLetters.length - 1]).length() == 1) {
+            String pair = pairsLetters[pairsLetters.length - 1];
+            if (pair.length() == 1) {
                 pairsLetters[pairsLetters.length - 1] = pair + pair;
             }
         }
